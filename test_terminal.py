@@ -2,6 +2,14 @@ import os
 import sys
 import shutil
 import requests
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
+import time
+import pytest
+
 
 # Caminhos
 pasta_central = r'C:\Users\Aluno\Documents\Pasta_Central'
@@ -35,12 +43,49 @@ try:
 except Exception as e:
     print(f'Ocorreu um erro ao copiar o arquivo: {e}')
 
+## selenium
+####
 
+geckodriver_path = os.path.join(os.path.dirname(__file__), 'geckodriver.exe')
+firefox_service = Service(executable_path=geckodriver_path)
 
+driver = webdriver.Firefox(service=firefox_service)
+
+CAF_page = "https://caf.sesisenaisp.org.br/"
+
+@pytest.mark.selenium
+def teste_selenium(monkeypatch):
+    # Simulando os argumentos de linha de comando
+    monkeypatch.setattr(sys, 'argv', ['test_terminal.py', 'meu_login_IHX', 'minha_senha_IHX', 'meu_login_CAF', 'minha_senha_CAF', 'turma1', '12345', 'caminho_arquivo_inprogress'])
+
+    # Configurando o driver
+    firefox_service = Service('C:/Downloads/geckodriver-v0.35.0-win-aarch64')
+    driver = webdriver.Firefox(service=firefox_service)
+    
+    try:
+        driver.get(CAF_page)
+        time.sleep(2)
+
+        campo_login_CAF = driver.find_element(By.XPATH, "/html/body/form/div[3]/div[2]/div[1]/span/div/div[2]/input")
+        campo_senha_CAF = driver.find_element(By.XPATH, "/html/body/form/div[3]/div[2]/div[1]/span/div/div[4]/div/input")
+
+        campo_login_CAF.send_keys('email@gmail.com')
+        campo_senha_CAF.send_keys('123456')
+        campo_senha_CAF.send_keys(Keys.RETURN)
+
+        time.sleep(2)
+
+    except Exception as e:
+        print(f"Erro ao fazer login: {e}")
+
+    finally:
+        driver.quit()
 
 ####
-#escreva aqui
-####
+
+
+
+
 
 
 
