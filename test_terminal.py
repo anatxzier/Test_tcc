@@ -44,22 +44,13 @@ except Exception as e:
     print(f'Ocorreu um erro ao copiar o arquivo: {e}')
 
 ## selenium
-####
-
-geckodriver_path = os.path.join(os.path.dirname(__file__), 'geckodriver.exe')
-firefox_service = Service(executable_path=geckodriver_path)
-
-driver = webdriver.Firefox(service=firefox_service)
-
-CAF_page = "https://caf.sesisenaisp.org.br/"
-
 @pytest.mark.selenium
-def teste_selenium(monkeypatch):
-    # Simulando os argumentos de linha de comando
-    monkeypatch.setattr(sys, 'argv', ['test_terminal.py', 'meu_login_IHX', 'minha_senha_IHX', 'meu_login_CAF', 'minha_senha_CAF', 'turma1', '12345', 'caminho_arquivo_inprogress'])
+def teste_selenium():
 
-    # Configurando o driver
-    firefox_service = Service('C:/Downloads/geckodriver-v0.35.0-win-aarch64')
+    CAF_page = "https://caf.sesisenaisp.org.br/"
+
+    # Configurando o caminho para o GeckoDriver (Firefox)
+    firefox_service = Service(r'C:\Users\Aluno\Downloads\geckodriver\geckodriver.exe')  # Substitua pelo caminho correto
     driver = webdriver.Firefox(service=firefox_service)
     
     try:
@@ -69,8 +60,8 @@ def teste_selenium(monkeypatch):
         campo_login_CAF = driver.find_element(By.XPATH, "/html/body/form/div[3]/div[2]/div[1]/span/div/div[2]/input")
         campo_senha_CAF = driver.find_element(By.XPATH, "/html/body/form/div[3]/div[2]/div[1]/span/div/div[4]/div/input")
 
-        campo_login_CAF.send_keys('email@gmail.com')
-        campo_senha_CAF.send_keys('123456')
+        campo_login_CAF.send_keys(login_CAF)
+        campo_senha_CAF.send_keys(senha_CAF)
         campo_senha_CAF.send_keys(Keys.RETURN)
 
         time.sleep(2)
@@ -80,9 +71,6 @@ def teste_selenium(monkeypatch):
 
     finally:
         driver.quit()
-
-####
-
 
 
 
@@ -127,20 +115,20 @@ try:
 except Exception as e:
     print(f"Ocorreu um erro ao tentar excluir o objeto: {e}")
 
-# # Criando um novo objeto Finished_file via API
-# url_finished_file = 'http://127.0.0.1:8000/api/concluido/'  # URL para criar o Finished_file
-# zip_path = f"{caminho_zip}.zip"  # Caminho do arquivo compactado
+# Criando um novo objeto Fineshed_file via API
+url_finished_file = 'http://127.0.0.1:8000/api/concluido/'  # URL para criar o Fineshed_file
+zip_path = f"{caminho_zip}.zip"  # Caminho do arquivo compactado
 
-# # Enviando a requisição POST para criar o novo Finished_file
-# try:
-#     with open(zip_path, 'rb') as zip_file:
-#         files = {'arquivo_finished': zip_file}
-#         data = {'turma': nome_turma}
-#         response = requests.post(url_finished_file, data=data, files=files)
+# Enviando a requisição POST para criar o novo Fineshed_file
+try:
+    with open(zip_path, 'rb') as zip_file:
+        files = {'arquivo_fineshed': zip_file}
+        data = {'turma': nome_turma}
+        response = requests.post(url_finished_file, data=data, files=files)
 
-#     if response.status_code == 201:
-#         print('Novo objeto Finished_file criado com sucesso!')
-#     else:
-#         print(f'Ocorreu um erro ao criar o objeto Finished_file: {response.status_code} - {response.text}')
-# except Exception as e:
-#     print(f'Ocorreu um erro ao enviar a requisição para criar o Finished_file: {e}')
+    if response.status_code == 201:
+        print('Novo objeto Fineshed_file criado com sucesso!')
+    else:
+        print(f'Ocorreu um erro ao criar o objeto Fineshed_file: {response.status_code} - {response.text}')
+except Exception as e:
+    print(f'Ocorreu um erro ao enviar a requisição para criar o Fineshed_file: {e}')
